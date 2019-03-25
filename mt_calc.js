@@ -32,58 +32,79 @@
       Returns the previous expression from the list of expressions in the textStr parameter
 
 */
-
-window.onload = init();
+// This calls in the init function when the page first loads
+window.onload = init;
 
 function init() {
+      //this var gets elements with the class name of calcButton
       var calcButtons = document.getElementsByClassName("calcButton");
+      //this for loop goes through the like array above and makes it so the function button click works when clicked for all of the elements of that class
       for (var i = 0; i < calcButtons.length; i++) {
-            calcButtons[i].onclick = buttonClick();
+            calcButtons[i].onclick = buttonClick;
       }
-      document.getElementById("calcWindow").addEventListener("keydown", calcKeys);
-};
+      //this makes it so when you press any key the calcKeys function is run
+      document.getElementById("calcWindow").onkeydown = calcKeys;
+}
 
 function buttonClick(e) {
+      //these two variables gets the value of the elemenets with the names calcWindow and decimals
       var calcValue = document.getElementById("calcWindow").value;
       var calcDecimal = document.getElementById("decimals").value;
+      //this code targets the value of the event
       var buttonValue = e.target.value;
-
+      //this switch checks to see if you clicked the del, bksp,enter, prev, or any other button and then does different things 
       switch (buttonValue) {
             case "del":
+                  //sets calcValue to nothing eraseing everything in the text box
                   calcValue = "";
                   break;
             case "bksp":
+                  //this runs the function erasekey that gets rid of one key from the text box
                   calcValue = eraseChar(calcValue);
                   break;
             case "enter":
-                  calcValue = " = " + evalEq(calcValue, calcDecimal) + "\n";
+                  //this runs the evalEq function so that the equation can actually be done
+                  calcValue += " = " + evalEq(calcValue, calcDecimal) + "\n";
                   break;
             case "prev":
-                  calcValue = lastEq(calcValue);
+                  //this runs the lastEq function so that the last equation that was typed can be grabed
+                  calcValue += lastEq(calcValue);
+                  break;
+            default:
+                  //this sets up the so that any other key that is pressed will simply make the character on that key appear in the text box
                   calcValue = calcValue + buttonValue;
                   break;
       }
+      //This sets the value of the text box to calcValue
       document.getElementById("calcWindow").value = calcValue;
+      //this puts the crsor in the window
       document.getElementById("calcWindow").focus();
 
 };
 
 
-function calcKeys() {
+function calcKeys(e) {
+      //these two variables gets the value of the elemenets with the names calcWindow and decimals
       var calcValue = document.getElementById("calcWindow").value;
       var calcDecimal = document.getElementById("decimals").value;
-      switch (e) {
+      //this makes it so the delete key, the enter key and the up arrow key do a certin thing when pressed
+      switch (e.key) {
             case "Delete":
+                  //sets calcValue to nothing eraseing everything in the text box
                   calcValue = "";
                   break;
             case "Enter":
-                  calcValue = " = " + evalEq(calcValue, calcDecimal);
+                  //this runs the evalEq function so that the equation can actually be done
+                  calcValue += " = " + evalEq(calcValue, calcDecimal);
                   break;
             case "ArrowUp":
-                  calcValue = lastEq(calcWindow.value);
-                  break;
+                  //this runs the lastEq function so that the last equation that was typed can be grabed
+                  calcValue += lastEq(calcWindow.value);
                   e.preventDefault();
+                  break;
+
       }
+      //this sets the value of the text box to calcValue so that it works for the different keys as well
       document.getElementById("calcWindow").value = calcValue;
 };
 
